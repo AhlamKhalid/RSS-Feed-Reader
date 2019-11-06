@@ -23,7 +23,7 @@ jasmine is a framework to test javascript code. When you write tests before even
 
 <!-- Screenshot -->
 ## Screenshot
-![Tests screenshot](img/screenshot.jpg)
+![Tests screenshot](img/screenshot.JPG)
 
 
 
