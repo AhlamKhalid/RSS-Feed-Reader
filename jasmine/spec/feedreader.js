@@ -114,8 +114,16 @@ $(
         loadFeed(index, done);
       });
       it("are loaded", function(done) {
-        // expect that container's first child exists
-        expect(container.firstChild).toBeDefined();
+        // get all feeds
+        const entries = container.children;
+        // check that the feeds successfully loaded
+        expect(entries.length).toBeGreaterThan(0);
+        // check the class of each feed
+        for (entry of entries) {
+          // entry.firstElementChild points to the article element
+          // inside each feed that should have the class "entry"
+          expect(entry.firstElementChild.className).toBe("entry");
+        }
         // call done() function here to declare that this expectation
         // relies on the async operation defined above
         done();
@@ -128,19 +136,26 @@ $(
        * by the loadFeed function that the content actually changes.
        * Remember, loadFeed() is asynchronous.
        */
+      // get the container that holds all feeds
       const container = document.querySelector(".feed");
-      // save initial content of the container
-      const innerHtml = container.innerHTML;
+      // variables for initial and updated feed content
+      let initialFeed, newFeed;
       beforeEach(function(done) {
-        // second entry in allFeeds array
-        const index = 1;
-        // call loadFeed
-        loadFeed(index, done);
+        // first: load initial feeds
+        loadFeed(0, function() {
+          // this line executes in the app scope(app.js) to get initial feed content
+          initialFeed = container.innerHTML;
+          // second: load new feeds & pass done function as callback
+          // to signal the end of async operation
+          loadFeed(1, done);
+        });
       });
       it("changes content", function(done) {
-        // expect that the content of container now is different
-        // than the initial content
-        expect(container.innerHTML).not.toEqual(innerHtml);
+        // get new feed content
+        newFeed = container.innerHTML;
+        // expect that the content now is different
+        // than the initial one
+        expect(newFeed).not.toEqual(initialFeed);
         // call done()
         done();
       });
